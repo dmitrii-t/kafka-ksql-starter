@@ -30,20 +30,19 @@ To spin up particular service only use
 
 ```bash
 make up <service>
-```
-like for example
-```bash
-make up broker
+
+# like for example
+make up broker 
 ```
 
 To run and attach to stdout of a particular service use
 
 ```bash
 make run <service>
-```
-for instance 
-```bash
+
+# for instance 
 make run dataload
+
 ```
 
 To stop all services use

@@ -31,7 +31,7 @@ To spin up particular service only use
 ```bash
 make up <service>
 
-# like for example
+# for instance
 make up broker 
 ```
 

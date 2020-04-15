@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# Starts transaction generator
-docker-compose -f dataload.yml up -d
-

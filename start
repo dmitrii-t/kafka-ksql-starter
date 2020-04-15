@@ -3,59 +3,69 @@
 set -e
 
 waitForKafkaConnect() {
+    local c=0
     while true; do
         if docker-compose -f kafka.yml logs kafka-connect-cp|grep -q "Kafka Connect started"; then
            echo "Kafka Connect started"
            break
         fi
-        echo "Waiting for Kafka Connect to start"
+        echo "($c) Waiting for Kafka Connect to start"
+        ((c+=1))
         sleep 1
     done
 }
 
 waitForPostgres() {
+    local c=0
     while true; do
         if docker-compose -f consumers.yml logs postgres|grep -q "database system is ready to accept connections"; then
            echo "Postgres started"
            break
         fi
-        echo "Waiting for Postgres to start"
+        echo "($c) Waiting for Postgres to start"
+        ((c+=1))
         sleep 1
     done
 }
 
 waitForConnector() {
     local connector=$1
+    local c=0
     while true; do
         if curl -s "http://localhost:18083/connectors/$connector/status"|jq -c -M '[.name,.connector.state,.tasks[].state]|join(":")'|grep -q "$connector:RUNNING:RUNNING"; then
            echo "Connector $connector started"
            break
         fi
-        echo "Waiting for connector $connector to start"
+        echo "($c) Waiting for connector $connector to start"
+        ((c+=1))
         sleep 1
     done
 }
 
 waitForTopic() {
     local topic=$1
+    local c=0
     while true; do
         if curl -s "http://localhost:8082/topics/$topic"|jq -c -M '.name'|grep -q "$topic"; then
            echo "Topic $topic created"
            break
         fi
-        echo "Waiting for topic $topic to create"
+        echo "($c) Waiting for topic $topic to create"
+        ((c+=1))
         sleep 1
     done
 }
 
 waitForSchema() {
      local schema=$1
+     local c=0
      while true; do
         if curl -s "http://localhost:8081/subjects/"|jq . |grep -q "$schema"; then
            echo "Schema $schema created"
            break
         fi
-        echo "Waiting schema $schema to create"
+        echo "($c) Waiting schema $schema to create"
+        ((c+=1))
         sleep 1
     done
 }
@@ -137,10 +147,10 @@ echo '==> Setup completed'
 # Runs dataload
 dataload_timeout=5
 echo "==> Running Dataload for ${dataload_timeout}sec"
-./start-dataload
+start-dataload
 sleep "$dataload_timeout"
 echo "Stopping dataload"
-./stop-dataload 2> /dev/null
+stop-dataload 2> /dev/null
 
 # Done
 echo ''

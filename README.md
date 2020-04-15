@@ -1,17 +1,56 @@
-# Kappa Architecture Sample
+# Kafka KSQL starter
 
-### Verify topics:
+### Synopsis
 
+The project is an example of ETL pipeline to calculate and populate transaction summaries for 
+specified time range without coding KStream application.
+
+### Prerequisites
+
+1. Docker
+1. Make
+1. Bash
+
+### Getting Started
+
+To run complete project with docker containers and service provisioning use 
+
+```bash
+make start
 ```
-# In different command line windows ...
 
-docker-compose -f kafka.yml exec broker kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --property print.key=true --topic transaction_input
+To spin up docker containers only use
 
-docker-compose -f kafka.yml exec broker kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --property print.key=true --topic transaction_signed
 
-docker-compose -f kafka.yml exec broker kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --property print.key=true --topic summary
-```     
+```bash
+make up
+```
+
+To spin up particular service only use
+
+```bash
+make up <service>
+```
+like for example
+```bash
+make up broker
+```
+
+To run and attach to stdout of a particular service use
+
+```bash
+make run <service>
+```
+for instance 
+```bash
+make run dataload
+```
+
+To stop all services use
+```bash
+make down
+```
 
 ### TODO
-1. Ingest Avro `timestamp` to Postgres `Timestamp`
+1. Convert Avro `timestamp` to Postgres `Timestamp`
 

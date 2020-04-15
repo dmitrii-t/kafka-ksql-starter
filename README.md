@@ -51,5 +51,5 @@ make down
 ```
 
 ### TODO
-1. Convert Avro `timestamp` to Postgres `Timestamp`
+1. Setup Avro `timestamp` to Postgres `Timestamp` converter
 
